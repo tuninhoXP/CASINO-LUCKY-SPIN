@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Lucky Spin - Slot Machine Premium</title>
+  <meta name="description" content="Jogo de slot machine profissional com ranking de jogadores">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <!-- Adicione este estilo no CSS -->
+<style>
+    .reset-ranking-btn {
+      
+      --primary-color: #00ffe7;
+      background-color: #00ffe7;
+        color: rgb(26, 4, 4);
+        margin-top: 16 px;
+    }
+
+    .reset-ranking-btn:hover {
+        background-color: #00a3cc;
+    }
+</style>
+
+<!-- Modifique o container do ranking -->
+<div class="ranking-container" id="rankingContainer">
+    <div class="ranking-title">TOP 10 JOGADORES</div>
+    <ul class="ranking-list" id="rankingList"></ul>
+    
+    <!-- Adicione este botão -->
+    <button class="reset-ranking-btn action-btn" id="resetRankingBtn">
+        RESETAR RANKING
+    </button>
+    
+    <button class="login-button" id="backFromRankingBtn">VOLTAR</button>
+</div>
+
+<!-- Atualize a parte do script -->
+<script>
+    (() => {
+        // ... código existente ...
+
+        // Adicione este event listener
+        document.getElementById('resetRankingBtn').addEventListener('click', () => {
+            if(confirm('Tem certeza que deseja resetar o ranking completo?\nEsta ação não pode ser desfeita!')) {
+                gameState.ranking = [];
+                localStorage.removeItem('slotMachineRanking');
+                updateRankingDisplay();
+                alert('Ranking resetado com sucesso!');
+            }
+        });
+
+        // ... restante do código existente ...
+    })();
+</script>
+  <style>
+    :root {
+      --primary-color: #00ffe7;
+      --primary-dark: #00c9b8;
+      --bg-gradient-start: #120024;
+      --bg-gradient-end: #1f0848;
+      --reel-bg-start: #222233;
+      --reel-bg-end: #101020;
+      --text-shadow: 0 0 12px var(--primary-color);
+      --box-shadow: 0 0 25px rgba(0, 255, 238, 0.67);
+      --transition-time: 0.3s;
+      --font-family: 'Orbitron', sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at center, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: #eee;
+      font-family: var(--font-family);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem 3rem;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 0.15em;
+      color: var(--primary-color);
+      text-shadow: var(--text-shadow);
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    .subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+    .login-container {
+      background: rgba(1, 0, 20, 0.85);
+      padding: 2rem 1.75rem;
+      border-radius: 20px;
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      width: 100%;
+      margin: 2rem auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .login-title {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    label.login-label {
+      font-size: 1rem;
+      color: var(--primary-color);
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+      user-select: none;
+      display: block;
+      text-align: center;
+    }
+    .login-input {
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px solid var(--primary-color);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      color: white;
+      font-family: var(--font-family);
+      font-size: 1rem;
+      width: 100%;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      user-select: text;
+    }
+    .login-input::placeholder {
+      color: #66f0e5cc;
+      opacity: 0.8;
+    }
+    .login-input:focus {
+      outline: none;
+      box-shadow: 0 0 14px var(--primary-color);
+      border-color: var(--primary-dark);
+    }
+    .login-button {
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 30px;
+      padding: 0.9rem;
+      cursor: pointer;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #010014;
+      transition: background-color var(--transition-time) ease, transform var(--transition-time) ease;
+      box-shadow: 0 0 15px rgba(0, 255, 231, 0.6);
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+    .Formulario-button {
+        margin-top: 1rem;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 30px;
+    padding: 0.8rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #010014;
+    cursor: pointer;
+    box-shadow: 0 0 26px rgba(0, 255, 231, 0.73);
+    transition: background-color var(--transition-time);
+    letter-spacing: 0.1em;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+    .login-button:hover:not(:disabled),
+    button:hover:not(:disabled) {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    .login-button:active:not(:disabled),
+    button:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .login-button:disabled,
+    button:disabled {
+      background-color: #003337;
+      cursor: not-allowed;
+      box-shadow: none;
+      color: #00504f;
+    }
+    .game-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+    }
+    .player-info {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      user-select: none;
+    }
+    .player-name {
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+    .attempts {
+      color: #ff5555;
+      font-weight: 700;
+    }
+    .slot-machine {
+      width: 100%;
+      background: rgba(1, 0, 20, 0.85);
+      padding: 2rem 2rem;
+      border-radius: 28px;
+      box-shadow: var(--box-shadow);
+      display: flex;
+      justify-content: center;
+      gap: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .slot-machine::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        transparent,
+        rgba(0, 255, 231, 0.12),
+        transparent,
+        transparent,
+        transparent
+      );
+      transform: rotate(30deg);
+      animation: shine 8s infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-30%, -30%); }
+      100% { transform: rotate(30deg) translate(30%, 30%); }
+    }
+    .reel-container {
+      position: relative;
+      perspective: 1000px;
+      width: clamp(90px, 20vw, 120px);
+      height: clamp(90px, 20vw, 120px);
+      border-radius: 20px;
+      box-shadow:
+        inset 0 0 8px rgba(0, 255, 231, 0.5),
+        0 0 15px rgba(0, 255, 231, 0.54);
+      background: linear-gradient(145deg, var(--reel-bg-start), var(--reel-bg-end));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .reel {
+      font-size: clamp(2.8rem, 7vw, 4rem);
+      color: var(--primary-color);
+      text-shadow:
+        0 0 20px var(--primary-color),
+        0 0 30px var(--primary-color);
+      font-weight: 900;
+      user-select: none;
+      transition: transform 0.4s ease;
+      transform-style: preserve-3d;
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .reel.win {
+      animation: winGlow 0.7s ease-in-out 3 alternate;
+    }
+    @keyframes winGlow {
+      0% { text-shadow: 0 0 20px #fffb00, 0 0 30px #ffff72; }
+      100% { text-shadow: 0 0 35px #fffb00, 0 0 55px #ffff72; }
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 2.75rem;
+      gap: 1.75rem;
+    }
+    button {
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 30px;
+      padding: 1rem 3.5rem;
+      cursor: pointer;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 700;
+      color: #010014;
+      transition: all var(--transition-time) ease;
+      box-shadow: 0 0 26px rgba(0, 255, 231, 0.73);
+      user-select: none;
+      letter-spacing: 0.1em;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent,
+        transparent,
+        transparent
+      );
+      transform: rotate(30deg);
+      animation: shine 8s infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    button:disabled,
+    .login-button:disabled {
+      background-color: #003337;
+      cursor: not-allowed;
+      box-shadow: none;
+      color: #00504f;
+      transform: none;
+    }
+    .message {
+      margin-top: 1rem;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: var(--primary-color);
+      min-height: 1.6em;
+      text-shadow: 0 0 12px rgba(0, 255, 231, 0.73);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      user-select: none;
+    }
+    .message.jackpot {
+      color: #ffd700;
+      text-shadow: 0 0 18px #ffd700, 0 0 30px #ffd700cc;
+      font-weight: 900;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .stat-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.7rem 1.25rem;
+      border-radius: 8px;
+      text-align: center;
+      user-select: none;
+      flex: 1;
+      margin: 0 0.25rem;
+    }
+    .stat-box div:first-child {
+      font-size: 0.75rem;
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .stat-value {
+      color: var(--primary-color);
+      font-weight: 900;
+      font-size: 1.3rem;
+      user-select: none;
+    }
+    .ranking-container {
+      display: none;
+      background: rgba(1, 0, 20, 0.9);
+      padding: 2rem 2rem;
+      border-radius: 20px;
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      width: 100%;
+      margin: 2rem auto;
+      text-align: center;
+      user-select: none;
+    }
+    .ranking-title {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      user-select: none;
+    }
+    .ranking-list {
+      list-style: none;
+      margin-top: 1rem;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 10px;
+      user-select: none;
+    }
+    .ranking-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .ranking-list::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+    }
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(0, 255, 231, 0.2);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+    .ranking-item:hover {
+      background-color: rgba(0, 255, 231, 0.1);
+    }
+    .ranking-item:first-child {
+      color: #ffd700;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+    .ranking-item:nth-child(2) {
+      color: #c0c0c0;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    .ranking-item:nth-child(3) {
+      color: #cd7f32;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    .ranking-player {
+      text-align: left;
+      flex: 1;
+      overflow-wrap: break-word;
+    }
+    .ranking-score {
+      text-align: right;
+      font-weight: 900;
+      min-width: 50px;
+    }
+    .view-ranking-btn {
+      margin-top: 1.7rem;
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      box-shadow: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      user-select: none;
+    }
+    .view-ranking-btn:hover {
+      background: rgba(0, 255, 231, 0.15);
+    }
+    .game-over {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(1, 0, 20, 0.9);
+      padding: 2rem 2rem;
+      border-radius: 20px;
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      width: 100%;
+      margin: 2rem auto;
+      text-align: center;
+      gap: 1.5rem;
+      user-select: none;
+    }
+    .game-over-title {
+      font-size: 1.9rem;
+      color: var(--primary-color);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+    }
+    .final-score {
+      font-size: 1.25rem;
+      color: white;
+      font-weight: 600;
+    }
+    .final-score span {
+      color: var(--primary-color);
+      font-weight: 900;
+      font-size: 1.75rem;
+      letter-spacing: 0.05em;
+    }
+    .final-message {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color);
+      user-select: none;
+    }
+    .restart-btn {
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 30px;
+      padding: 0.9rem 2.5rem;
+      cursor: pointer;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #010014;
+      transition: background-color var(--transition-time);
+      user-select: none;
+    }
+    .restart-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    @media (max-width: 600px) {
+      .slot-machine {
+        padding: 1.5rem 1rem;
+        gap: 1rem;
+      }
+      .controls {
+        margin-top: 1.5rem;
+      }
+      button {
+        padding: 0.8rem 2.5rem;
+        font-size: 1.3rem;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .stat-box {
+        margin: 0;
+      }
+      .ranking-container {
+        padding: 1.5rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main role="main" aria-label="Jogo Lucky Spin Slot Machine Premium" style="width: 100%; max-width: 800px;">
+    <header class="header">
+      <h1>LUCKY SPIN</h1>
+      <p class="subtitle">SLOT MACHINE PREMIUM</p>
+    </header>
+    <!-- Tela de Login -->
+    <section class="login-container" id="loginContainer">
+      <div class="login-title">Digite seu nome para começar</div>
+      <label class="login-label" for="playerNameInput">Nome do Jogador</label>
+      <input
+        type="text"
+        class="login-input"
+        id="playerNameInput"
+        placeholder="Seu nome"
+        maxlength="15"
+        aria-label="Nome do jogador"
+        autocomplete="off"
+        spellcheck="false"
+        autocorrect="off"
+        autocapitalize="words"
+        />
+      <button class="login-button" id="startGameBtn" aria-live="polite" aria-pressed="false">JOGAR</button>
+
+    </section>
+
+    <!-- Jogo Principal -->
+    <section class="game-container" id="gameContainer" aria-live="polite" aria-atomic="true" tabindex="-1">
+      <div class="player-info">
+        <div>Jogador: <span class="player-name" id="currentPlayerName"></span></div>
+        <div>Tentativas: <span class="attempts" id="remainingAttempts">5</span>/5</div>
+      </div>
+      <div class="slot-machine" aria-label="Slot machine com 3 rolos" role="region">
+        <div class="reel-container" aria-hidden="true">
+          <div class="reel" id="reel1" aria-live="polite" aria-atomic="true">🍒</div>
+        </div>
+        <div class="reel-container" aria-hidden="true">
+          <div class="reel" id="reel2" aria-live="polite" aria-atomic="true">🍋</div>
+        </div>
+        <div class="reel-container" aria-hidden="true">
+          <div class="reel" id="reel3" aria-live="polite" aria-atomic="true">🔔</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="spinBtn" aria-live="polite" aria-pressed="false" aria-label="Girar os rolos">GIRAR</button>
+        <div class="message" id="message" aria-live="assertive" role="alert"></div>
+        <div class="stats" aria-label="Estatísticas do jogador">
+          <div class="stat-box" aria-live="polite"> <div>PONTUAÇÃO</div> <div class="stat-value" id="currentScore">0</div> </div>
+          <div class="stat-box" aria-live="polite"> <div>JACKPOTS</div> <div class="stat-value" id="jackpotCount">0</div> </div>
+          <div class="stat-box" aria-live="polite"> <div>VITÓRIAS</div> <div class="stat-value" id="winCount">0</div> </div>
+        </div>
+        <button class="view-ranking-btn" id="viewRankingBtn" aria-label="Ver ranking dos jogadores">VER RANKING</button>
+        <a href=""></a>
+        <button class="Formulario-button" id="Formulario" aria-live="polite" aria-pressed="false" onclick="href="">Formulario</button>
+      </div>
+    </section>
+
+    <!-- Tela de Ranking -->
+    <section class="ranking-container" id="rankingContainer" aria-live="polite" aria-atomic="true" tabindex="-1">
+      <h2 class="ranking-title">TOP 10 JOGADORES</h2>
+      <ul class="ranking-list" id="rankingList" tabindex="0">
+        <!-- Ranking será preenchido pelo JavaScript -->
+      </ul>
+      <button class="login-button" id="backFromRankingBtn" aria-label="Voltar ao jogo principal">VOLTAR</button>
+    </section>
+
+    <!-- Tela de Game Over -->
+    <section class="game-over" id="gameOverContainer" aria-live="polite" aria-atomic="true" tabindex="-1">
+      <h2 class="game-over-title">FIM DE JOGO!</h2>
+      <div class="final-score">Sua pontuação: <span id="finalScoreValue">0</span></div>
+      <div class="final-message" id="finalMessage"></div>
+      <button class="restart-btn" id="restartGameBtn" aria-label="Jogar novamente">JOGAR NOVAMENTE</button>
+      <button class="view-ranking-btn" id="viewRankingFinalBtn" aria-label="Ver ranking dos jogadores">VER RANKING</button>
+    </section>
+  </main>
+
+  <script>
+
+function FormularioLink() {
+  const Formulario = document.getElementById('Formulario');
+  Formulario.addEventListener('click', () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSehmgjSrn8PR--pnoWAPs3kcsCpFqL358vO8EwNSUMcYZPBNQ/viewform?usp=header', '_blank', 'noopener');
+  });
+}
+FormularioLink();
+
+
+
+
+
+
+    (() => {
+      // Elementos do DOM
+      const loginContainer = document.getElementById('loginContainer');
+      const gameContainer = document.getElementById('gameContainer');
+      const rankingContainer = document.getElementById('rankingContainer');
+      const gameOverContainer = document.getElementById('gameOverContainer');
+      
+      const playerNameInput = document.getElementById('playerNameInput');
+      const startGameBtn = document.getElementById('startGameBtn');
+      const currentPlayerName = document.getElementById('currentPlayerName');
+      const remainingAttempts = document.getElementById('remainingAttempts');
+      const reels = [
+        document.getElementById('reel1'),
+        document.getElementById('reel2'),
+        document.getElementById('reel3')
+      ];
+      const spinBtn = document.getElementById('spinBtn');
+      const messageDiv = document.getElementById('message');
+      const currentScore = document.getElementById('currentScore');
+      const jackpotCount = document.getElementById('jackpotCount');
+      const winCount = document.getElementById('winCount');
+      const viewRankingBtn = document.getElementById('viewRankingBtn');
+      const backFromRankingBtn = document.getElementById('backFromRankingBtn');
+      const rankingList = document.getElementById('rankingList');
+      const finalScoreValue = document.getElementById('finalScoreValue');
+      const finalMessage = document.getElementById('finalMessage');
+      const restartGameBtn = document.getElementById('restartGameBtn');
+      const viewRankingFinalBtn = document.getElementById('viewRankingFinalBtn');
+
+      // Configurações do jogo
+      const symbols = ['🍒', '🍋', '🔔', '💎', '7️⃣', '🍀'];
+      const winMultipliers = {
+        '🍒': 2,
+        '🍋': 3,
+        '🔔': 5,
+        '💎': 10,
+        '🍀': 15,
+        '7️⃣': 50 // Jackpot
+      };
+      const MAX_ATTEMPTS = 5;
+      const MAX_PLAYERS_IN_RANKING = 10;
+      const SPIN_ANIMATION_STEPS = 12;
+      const SPIN_INTERVAL_MS = 80;
+
+      // Estado do jogo
+      let gameState = {
+        playerName: '',
+        attemptsLeft: MAX_ATTEMPTS,
+        score: 0,
+        stats: {
+          jackpots: 0,
+          wins: 0
+        },
+        ranking: []
+      };
+
+      // Helpers para manipulação de classes CSS
+      function clearClassFromMessage(cls) {
+        if (messageDiv.classList.contains(cls)) {
+          messageDiv.classList.remove(cls);
+        }
+      }
+      function addClassToMessage(cls) {
+        clearClassFromMessage('jackpot');
+        messageDiv.classList.add(cls);
+      }
+
+      // Inicializa o jogo e configura eventos
+      function initGame() {
+        loadRanking();
+
+        startGameBtn.addEventListener('click', () => {
+          startGameBtn.setAttribute('aria-pressed', 'true');
+          startGame();
+          setTimeout(() => startGameBtn.setAttribute('aria-pressed', 'false'), 200);
+        });
+
+        spinBtn.addEventListener('click', () => {
+          spinBtn.setAttribute('aria-pressed', 'true');
+          spin();
+          setTimeout(() => spinBtn.setAttribute('aria-pressed', 'false'), 200);
+        });
+
+        viewRankingBtn.addEventListener('click', () => showRanking());
+        backFromRankingBtn.addEventListener('click', () => hideRanking());
+        restartGameBtn.addEventListener('click', () => restartGame());
+        viewRankingFinalBtn.addEventListener('click', () => showRanking());
+
+        playerNameInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            startGameBtn.click();
+          }
+        });
+      }
+      
+      // Carrega o ranking do localStorage
+      function loadRanking() {
+        const savedRanking = localStorage.getItem('slotMachineRanking');
+        if (savedRanking) {
+          try {
+            gameState.ranking = JSON.parse(savedRanking);
+            updateRankingDisplay();
+          } catch {
+            gameState.ranking = [];
+          }
+        }
+      }
+
+      // Salva o ranking no localStorage
+      function saveRanking() {
+        try {
+          localStorage.setItem('slotMachineRanking', JSON.stringify(gameState.ranking));
+        } catch {
+          // localStorage pode estar cheio ou indisponível
+        }
+      }
+
+      // Atualiza exibição do ranking
+      function updateRankingDisplay() {
+        rankingList.innerHTML = '';
+        if (gameState.ranking.length === 0) {
+          rankingList.innerHTML = '<li>Nenhum jogador ainda</li>';
+          return;
+        }
+        gameState.ranking.forEach((player, index) => {
+          const li = document.createElement('li');
+          li.className = 'ranking-item';
+          if (index === 0) li.style.color = '#ffd700';
+          else if (index === 1) li.style.color = '#c0c0c0';
+          else if (index === 2) li.style.color = '#cd7f32';
+
+          const playerSpan = document.createElement('span');
+          playerSpan.className = 'ranking-player';
+          playerSpan.textContent = `${index + 1}. ${player.name}`;
+
+          const scoreSpan = document.createElement('span');
+          scoreSpan.className = 'ranking-score';
+          scoreSpan.textContent = player.score;
+
+          li.appendChild(playerSpan);
+          li.appendChild(scoreSpan);
+          rankingList.appendChild(li);
+        });
+      }
+
+      // Inicia o jogo após validação do nome
+      function startGame() {
+        const name = playerNameInput.value.trim();
+        if (name === '') {
+          alert('Por favor, digite seu nome!');
+          playerNameInput.focus();
+          return;
+        }
+        gameState.playerName = name;
+        gameState.attemptsLeft = MAX_ATTEMPTS;
+        gameState.score = 0;
+        gameState.stats = { jackpots: 0, wins: 0 };
+
+        currentPlayerName.textContent = name;
+        remainingAttempts.textContent = MAX_ATTEMPTS;
+        currentScore.textContent = '0';
+        jackpotCount.textContent = '0';
+        winCount.textContent = '0';
+        messageDiv.textContent = '';
+        clearClassFromMessage('jackpot');
+
+        loginContainer.style.display = 'none';
+        rankingContainer.style.display = 'none';
+        gameOverContainer.style.display = 'none';
+        gameContainer.style.display = 'flex';
+        spinBtn.disabled = false;
+
+        // Focar no botão girar para acessibilidade
+        spinBtn.focus();
+      }
+
+      // Finaliza o jogo, atualiza ranking e mostra tela fim de jogo
+      function endGame() {
+        addToRanking(gameState.playerName, gameState.score);
+
+        finalScoreValue.textContent = gameState.score;
+        if (gameState.stats.jackpots > 0) {
+          finalMessage.textContent = '🎉 Incrível! Você conseguiu um JACKPOT! 🎉';
+          finalMessage.classList.add('jackpot');
+        } else if (gameState.score >= 50) {
+          finalMessage.textContent = 'Ótima pontuação! Você foi muito bem!';
+          finalMessage.classList.remove('jackpot');
+        } else if (gameState.score >= 20) {
+          finalMessage.textContent = 'Boa tentativa! Quase lá!';
+          finalMessage.classList.remove('jackpot');
+        } else {
+          finalMessage.textContent = 'Tente novamente para melhorar seu score!';
+          finalMessage.classList.remove('jackpot');
+        }
+
+        gameContainer.style.display = 'none';
+        rankingContainer.style.display = 'none';
+        gameOverContainer.style.display = 'flex';
+
+        restartGameBtn.focus();
+      }
+
+      // Adiciona jogador e pontuação ao ranking (mantendo top 10)
+      function addToRanking(name, score) {
+        const lowerName = name.toLowerCase();
+        const existing = gameState.ranking.findIndex(p => p.name.toLowerCase() === lowerName);
+        if (existing !== -1) {
+          if (score > gameState.ranking[existing].score) {
+            gameState.ranking[existing].score = score;
+          }
+        } else {
+          gameState.ranking.push({ name, score });
+        }
+        gameState.ranking.sort((a, b) => b.score - a.score);
+        if (gameState.ranking.length > MAX_PLAYERS_IN_RANKING) {
+          gameState.ranking = gameState.ranking.slice(0, MAX_PLAYERS_IN_RANKING);
+        }
+        saveRanking();
+        updateRankingDisplay();
+      }
+
+      function restartGame() {
+        gameOverContainer.style.display = 'none';
+        rankingContainer.style.display = 'none';
+        loginContainer.style.display = 'flex';
+        playerNameInput.value = gameState.playerName;
+        playerNameInput.focus();
+      }
+
+      function showRanking() {
+        loginContainer.style.display = 'none';
+        gameContainer.style.display = 'none';
+        gameOverContainer.style.display = 'none';
+        rankingContainer.style.display = 'block';
+        backFromRankingBtn.focus();
+      }
+
+      function hideRanking() {
+        rankingContainer.style.display = 'none';
+        if (gameState.attemptsLeft > 0) {
+          gameContainer.style.display = 'flex';
+          spinBtn.focus();
+        } else {
+          gameOverContainer.style.display = 'flex';
+          restartGameBtn.focus();
+        }
+      }
+
+      // Gira os rolos com animação e é o trigger principal do jogo
+      function spin() {
+        if (gameState.attemptsLeft <= 0) return;
+
+        spinBtn.disabled = true;
+        clearClassFromMessage('jackpot');
+        messageDiv.textContent = '';
+
+        gameState.attemptsLeft--;
+        remainingAttempts.textContent = gameState.attemptsLeft;
+
+        let step = 0;
+        let animationSymbols = [];
+
+        // Gerar sequência de símbolos para animação e resultado final
+        function generateSpinSymbols() {
+          const sequence = [];
+          for (let i = 0; i < SPIN_ANIMATION_STEPS; i++) {
+            sequence.push(shuffleSymbols());
+          }
+          return sequence;
+        }
+
+        // Embaralha símbolo aleatório para animação
+        function shuffleSymbols() {
+          return [
+            symbols[Math.floor(Math.random() * symbols.length)],
+            symbols[Math.floor(Math.random() * symbols.length)],
+            symbols[Math.floor(Math.random() * symbols.length)]
+          ];
+        }
+
+        animationSymbols = generateSpinSymbols();
+
+        const spinInterval = setInterval(() => {
+          if (step === SPIN_ANIMATION_STEPS) {
+            clearInterval(spinInterval);
+
+            // Resultado final, gerado com lógica mais natural
+            const outcome = generateOutcome();
+            displaySymbols(outcome);
+
+            evaluateResult(outcome);
+
+            spinBtn.disabled = false;
+
+            if (gameState.attemptsLeft <= 0) {
+              setTimeout(endGame, 2000);
+            }
+            return;
+          }
+
+          displaySymbols(animationSymbols[step]);
+          step++;
+        }, SPIN_INTERVAL_MS);
+      }
+
+      // Exibe símbolos nos rolos, animando vitória se aplicável
+      function displaySymbols(symbolArray, isWin = false) {
+        reels.forEach((reel, i) => {
+          reel.textContent = symbolArray[i];
+          if (isWin) {
+            reel.classList.add('win');
+            // Remover após animação
+            setTimeout(() => reel.classList.remove('win'), 2100);
+          }
+        });
+      }
+
+      // Gera resultado final para a rodada com alguma probabilidade de combinação
+      function generateOutcome() {
+        const chance = Math.random();
+        if (chance < 0.15) {
+          // Jackpot 7️⃣
+          return ['7️⃣', '7️⃣', '7️⃣'];
+        } else if (chance < 0.3) {
+          // Três iguais aleatórios (exceto 7)
+          const filteredSymbols = symbols.filter(s => s !== '7️⃣');
+          const sym = filteredSymbols[Math.floor(Math.random() * filteredSymbols.length)];
+          return [sym, sym, sym];
+        } else if (chance < 0.5) {
+          // Dois iguais + um diferente
+          const sym = symbols[Math.floor(Math.random() * symbols.length)];
+          let diffSym;
+          do {
+            diffSym = symbols[Math.floor(Math.random() * symbols.length)];
+          } while (diffSym === sym);
+          const pos = [0, 1, 2];
+          // posição dos dois iguais
+          const equalPos1 = pos.splice(Math.floor(Math.random() * pos.length), 1)[0];
+          const equalPos2 = pos.splice(Math.floor(Math.random() * pos.length), 1)[0];
+          const outcome = [];
+          outcome[equalPos1] = sym;
+          outcome[equalPos2] = sym;
+          outcome[pos[0]] = diffSym;
+          return outcome;
+        } else {
+          // Completo aleatório
+          let shuffled = [...symbols];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled.slice(0, 3);
+        }
+      }
+
+      // Avalia resultado, atualiza pontuação e mostra mensagem animada
+      function evaluateResult(symbolsArr) {
+        const uniqueSymbols = [...new Set(symbolsArr)];
+        let pointsEarned = 0;
+        let message = '';
+
+        // Remove qualquer classe jackpot antes
+        clearClassFromMessage('jackpot');
+
+        // Avaliar combinações
+        if (symbolsArr.every(s => s === '7️⃣')) {
+          pointsEarned = winMultipliers['7️⃣'];
+          message = `🎉 JACKPOT! Você ganhou ${pointsEarned} pontos! 🎉`;
+          addClassToMessage('jackpot');
+          gameState.stats.jackpots++;
+          gameState.stats.wins++;
+          displaySymbols(symbolsArr, true);
+        } else if (uniqueSymbols.length === 1) {
+          pointsEarned = winMultipliers[symbolsArr[0]] || 1;
+          message = `🔥 Três ${symbolsArr[0]}! Você ganhou ${pointsEarned} pontos!`;
+          gameState.stats.wins++;
+          displaySymbols(symbolsArr, true);
+        } else if (uniqueSymbols.length === 2) {
+          pointsEarned = 1;
+          message = `😀 Dois símbolos iguais! Ganhou ${pointsEarned} ponto!`;
+          gameState.stats.wins++;
+          displaySymbols(symbolsArr, true);
+        } else {
+          message = '😞 Tente novamente!';
+          displaySymbols(symbolsArr, false);
+        }
+
+        if(pointsEarned > 0) {
+          gameState.score += pointsEarned;
+          currentScore.textContent = gameState.score;
+        }
+
+        messageDiv.textContent = message;
+        jackpotCount.textContent = gameState.stats.jackpots;
+        winCount.textContent = gameState.stats.wins;
+      }
+
+      // Focar automaticamente elementos para acessibilidade ao mudar visibilidade
+      function manageFocusBasedOnVisible() {
+        if (gameContainer.style.display === 'flex') spinBtn.focus();
+        else if (rankingContainer.style.display === 'block') backFromRankingBtn.focus();
+        else if (gameOverContainer.style.display === 'flex') restartGameBtn.focus();
+        else if (loginContainer.style.display === 'flex') playerNameInput.focus();
+      }
+
+      // Ligar inicialização após DOM carregado
+      window.addEventListener('DOMContentLoaded', () => {
+        initGame();
+        manageFocusBasedOnVisible();
+      });
+    })();
+  </script>
+</body>
+</html>
+
